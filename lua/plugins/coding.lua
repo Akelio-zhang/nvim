@@ -2,7 +2,13 @@ return {
   -- git
   {
     'kdheepak/lazygit.nvim',
-    cmd = 'LazyGit',
+    cmd = {
+      "LazyGit",
+      "LazyGitConfig",
+      "LazyGitCurrentFile",
+      "LazyGitFilter",
+      "LazyGitFilterCurrentFile",
+    },
   },
   {
     'lewis6991/gitsigns.nvim',

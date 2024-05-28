@@ -1,5 +1,6 @@
 return {
   -- colorscheme
+  --[[
   {
     'catppuccin/nvim',
     name = 'catppuccin',
@@ -19,6 +20,7 @@ return {
       },
     },
   },
+  ]]
 
   -- alpha
   {
@@ -61,7 +63,7 @@ return {
       }
 
       local stats = require('lazy').stats()
-      dashboard.section.footer.val = icons.loaded .. ' GIN-Neovim loaded ' .. stats.count .. ' plugins'
+      dashboard.section.footer.val = icons.loaded .. ' Ake-Neovim loaded ' .. stats.count .. ' plugins'
 
       alpha.setup(dashboard.opts)
 

@@ -58,6 +58,7 @@ call plug#end()
 "   filetype indent off   " Disable file-type-specific indentation
 "   syntax off            " Disable syntax highlighting
 
+" https://github.com/folke/tokyonight.nvim
 colorscheme tokyonight-night
 
 " -----------------------------------------------------------------
