@@ -39,7 +39,9 @@ return {
         'css',
         'javascript',
         'java',
-        'go'
+        'go',
+	'rust',
+	'just'
       },
     },
     config = function(_, opts)

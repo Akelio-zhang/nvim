@@ -44,8 +44,8 @@ Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
 " On-demand loading: loaded when a file with a specific file type is opened
 Plug 'tpope/vim-fireplace', { 'for': 'clojure' }
 
-" Just justfile plugin
-Plug 'NoahTheDuke/vim-just'
+" (Use nvim-treesitter instead) Just justfile plugin
+" Plug 'NoahTheDuke/vim-just'
 
 " Unmanaged plugin (manually installed and updated)
 Plug '~/my-prototype-plugin'
