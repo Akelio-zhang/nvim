@@ -1,5 +1,18 @@
-:set number
-:set guicursor=i:block
+set number
+set guicursor=i:block
+
+" Set tab width to 4 spaces
+set tabstop=4
+
+" Set the number of spaces inserted for each step of (auto)indent
+set shiftwidth=4
+
+" Convert tabs to spaces
+set expandtab
+
+" Optional: Ensure backspace works properly with spaces
+set softtabstop=4
+
 syntax on
 
 set rtp+=/opt/homebrew/opt/fzf
