@@ -1,4 +1,6 @@
 return {
+  -- wakatime
+  { 'wakatime/vim-wakatime', lazy = false },
   -- explorer
   {
     'nvim-tree/nvim-tree.lua',
