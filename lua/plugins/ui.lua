@@ -1,26 +1,13 @@
 return {
   -- colorscheme
-  --[[
   {
-    'catppuccin/nvim',
-    name = 'catppuccin',
+    'folke/tokyonight.nvim',
+    lazy = false,
     priority = 1000,
     init = function()
-      vim.cmd.colorscheme('catppuccin')
+      vim.cmd.colorscheme('tokyonight-night')
     end,
-    opts = {
-      flavour = 'mocha',
-      no_italic = true,
-      highlight_overrides = {
-        all = function(colors)
-          return {
-            NormalFloat = { bg = colors.base },
-          }
-        end,
-      },
-    },
   },
-  ]]
 
   -- alpha
   {

@@ -1,4 +1,7 @@
 local opt = vim.opt
+local undo_dir = vim.fn.stdpath('state') .. '/undo'
+
+vim.fn.mkdir(undo_dir, 'p')
 
 opt.tabstop = 2
 opt.shiftwidth = 2
@@ -34,6 +37,7 @@ opt.shortmess = 'atI'
 opt.updatetime = 100
 opt.redrawtime = 1500
 opt.timeoutlen = 500
+opt.guicursor = 'a:block'
 
 -- folding
 opt.foldenable = false
@@ -42,9 +46,10 @@ opt.foldexpr = 'nvim_treesitter#foldexpr()'
 opt.foldlevel = 99
 
 -- list char
-opt.list = true
+opt.list = false
 opt.listchars = {
-  -- tab = "",
+  tab = '→ ',
+  space = '·',
   trail = '',
   extends = '»',
   precedes = '«',
@@ -57,4 +62,5 @@ opt.listchars = {
 -- opt.backupdir = "~/.config/nvim/tmp"
 
 -- undofile
-opt.undofile = false
+opt.undofile = true
+opt.undodir = undo_dir

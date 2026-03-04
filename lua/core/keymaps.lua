@@ -2,7 +2,8 @@ local keymap = vim.keymap.set
 local opts = { noremap = true, silent = true }
 
 -- remap space as leader key
--- vim.g.mapleader = '<SPACE>'
+vim.g.mapleader = ' '
+vim.g.maplocalleader = ' '
 
 -- remap
 keymap('n', 's', '<Cmd>w<CR>', opts)
@@ -15,6 +16,9 @@ keymap('n', 'n', 'nzz', opts)
 keymap('n', 'N', 'Nzz', opts)
 keymap('n', '<SPACE>nh', '<Cmd>nohlsearch<CR>', opts)
 keymap('n', '<SPACE>ev', '<Cmd>e $MYVIMRC<CR>', opts)
+keymap('n', '<SPACE>sp', '<Cmd>NvimLazyProfile<CR>', opts)
+keymap('n', '<SPACE>sh', '<Cmd>NvimHealth<CR>', opts)
+keymap('n', '<SPACE>ss', '<Cmd>NvimStartupReport<CR>', opts)
 keymap('n', '<SPACE>sj', '<Cmd>set splitbelow<CR><Cmd>split<CR>', opts)
 keymap('n', '<SPACE>sl', '<Cmd>set nosplitright<CR><Cmd>vsplit<CR>', opts)
 keymap('n', '<SPACE><SPACE>', '<Esc>/<++><CR><Cmd>nohlsearch<CR>c4l', opts)
@@ -26,6 +30,12 @@ keymap('n', '<SPACE>dt', vim.diagnostic.open_float, opts)
 keymap('n', '<SPACE>dp', vim.diagnostic.goto_prev, opts)
 keymap('n', '<SPACE>dn', vim.diagnostic.goto_next, opts)
 keymap('n', '<SPACE>dl', vim.diagnostic.setloclist, opts)
+keymap({ 'n', 'v' }, '<SPACE>cf', function()
+  local ok, conform = pcall(require, 'conform')
+  if ok then
+    conform.format({ async = true, lsp_fallback = true })
+  end
+end, opts)
 
 -- telescope
 keymap('n', '<SPACE>ff', '<Cmd>Telescope find_files<CR>', opts)

@@ -5,7 +5,7 @@
 ## 1. 当前配置结构
 
 - 启动入口：`init.vim`
-- 插件管理：`vim-plug` 与 `lazy.nvim` 混用
+- 插件管理：`lazy.nvim`（已移除 `vim-plug`）
 - `lua/core/*`：基础设置、快捷键、自动命令、内置模块禁用
 - `lua/plugins/*`：按功能拆分的 lazy 插件定义（ui/editor/lsp/cmp/coding/markdown）
 
@@ -17,12 +17,12 @@
 - 文件与检索：`yazi.nvim`、`telescope.nvim`、`telescope-fzf-native.nvim`
 - Git：`lazygit.nvim`、`gitsigns.nvim`
 - 语法与编辑增强：`nvim-treesitter`、`nvim-autopairs`、`nvim-ts-autotag`、`Comment.nvim`、`todo-comments.nvim`、`nvim-colorizer.lua`
-- LSP 与补全：`nvim-lspconfig`、`nvim-cmp`、`LuaSnip`、`cmp-*`、`lspkind.nvim`、`cmp-tabnine`
+- LSP 与补全：`nvim-lspconfig`、`mason.nvim`、`mason-lspconfig.nvim`、`blink.cmp`、`LuaSnip`
 - 格式化：`conform.nvim`
 - Markdown：`markdown-preview.nvim`、`vim-table-mode`、`md-img-paste.vim`
 - 其他：`vim-wakatime`
 
-另有 `vim-plug` 插件在 `init.vim` 中仍在加载（如 `tokyonight`、`nerdtree`、`vim-go` 等）。
+历史 `vim-plug` 段已迁移/清理，当前以 `lazy.nvim` 为单一插件管理入口。
 
 ## 3. 已识别问题
 
@@ -57,11 +57,11 @@
 
 ### Phase 2（建议下一步）
 
-- 将 `vim-plug` 插件逐项迁移到 `lazy.nvim`
-- 完成后移除 `plug#begin/plug#end` 块，实现单一插件管理
+- [x] 将 `vim-plug` 插件逐项迁移/清理到 `lazy.nvim`
+- [x] 移除 `plug#begin/plug#end` 块，实现单一插件管理
 
 ### Phase 3（增强）
 
-- 引入 `mason.nvim + mason-lspconfig` 管理 LSP 安装与自动配置
-- 细化 `conform` 与 LSP 的职责边界（格式化统一走 conform）
-- 增加启动与加载性能检查（`:Lazy profile`、`:checkhealth`）
+- [x] 引入 `mason.nvim + mason-lspconfig` 管理 LSP 安装与自动配置
+- [x] 细化 `conform` 与 LSP 的职责边界（格式化统一走 conform）
+- [x] 增加启动与加载性能检查（`:Lazy profile`、`:checkhealth`）

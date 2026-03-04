@@ -79,6 +79,10 @@ return {
       })
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
+      local mason_bin = vim.fn.stdpath('data') .. '/mason/bin'
+      if not string.find(':' .. vim.env.PATH .. ':', ':' .. mason_bin .. ':', 1, true) then
+        vim.env.PATH = mason_bin .. ':' .. vim.env.PATH
+      end
 
       vim.lsp.config('*', {
         capabilities = capabilities,

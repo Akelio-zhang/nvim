@@ -56,10 +56,18 @@ return {
     opts = {
       formatters_by_ft = {
         lua = { 'stylua' },
-        javascript = { 'prettierd' },
-        vue = { 'prettierd' },
-        python = { "ruff_format" },  -- 使用 ruff 的格式化功能
-        java = { "google-java-format" },  -- 使用 google-java-format
+        javascript = { 'prettierd', 'prettier' },
+        typescript = { 'prettierd', 'prettier' },
+        javascriptreact = { 'prettierd', 'prettier' },
+        typescriptreact = { 'prettierd', 'prettier' },
+        html = { 'prettierd', 'prettier' },
+        css = { 'prettierd', 'prettier' },
+        json = { 'prettierd', 'prettier' },
+        vue = { 'prettierd', 'prettier' },
+        python = { 'ruff_format' },
+        java = { 'google-java-format' },
+        go = { 'goimports', 'gofmt' },
+        rust = { 'rustfmt' },
       },
       format_on_save = {
         timeout_ms = 600,
