@@ -55,7 +55,7 @@ return {
 
       dashboard.section.buttons.val = {
         dashboard.button('n', icons.new_file .. ' New File', '<Cmd>ene <BAR> startinsert<CR>'),
-        dashboard.button('p', icons.search .. ' Search Projects', '<Cmd>Telescope projects<CR>'),
+        dashboard.button('p', icons.search .. ' Resume Search', '<Cmd>Telescope resume<CR>'),
         dashboard.button('e', icons.explorer .. ' yazi', '<space>ya'),
         dashboard.button('l', icons.plugin_manager .. ' Lazy Manage', '<Cmd>Lazy<CR>'),
         dashboard.button('s', icons.setting .. ' Setting', '<Cmd>e $MYVIMRC<CR>'),

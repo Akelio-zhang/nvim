@@ -20,12 +20,10 @@ local disabled_built_ins = {
   'zipPlugin',
   'tutor',
   'rplugin',
-  'syntax',
   'synmenu',
   'optwin',
   'compiler',
   'bugreport',
-  'ftplugin',
 }
 
 for _, plugin in pairs(disabled_built_ins) do

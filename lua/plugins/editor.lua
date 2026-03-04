@@ -54,7 +54,7 @@ return {
         defaults = {
           prompt_prefix = ' ',
           selection_caret = ' ',
-          layout_stratgy = 'center',
+          layout_strategy = 'center',
           layout_config = {
             width = 0.8,
             height = 0.7,

@@ -1,13 +1,42 @@
 return {
-  -- lsp installation
+  -- mason
+  {
+    'mason-org/mason.nvim',
+    cmd = 'Mason',
+    opts = {},
+  },
+  {
+    'mason-org/mason-lspconfig.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'mason-org/mason.nvim',
+      'neovim/nvim-lspconfig',
+    },
+    opts = {
+      ensure_installed = {
+        'jdtls',
+        'pyright',
+        'gopls',
+        'rust_analyzer',
+        'html',
+        'ts_ls',
+        'cssls',
+        'jsonls',
+        'bashls',
+        'lua_ls',
+      },
+      automatic_enable = true,
+    },
+  },
 
-  -- lsp
+  -- lsp core
   {
     'neovim/nvim-lspconfig',
     event = 'VeryLazy',
     dependencies = {
       { 'folke/neodev.nvim', opts = {} },
       { 'j-hui/fidget.nvim', opts = {} },
+      'saghen/blink.cmp',
     },
     config = function()
       local icons = require('plugins.config.icons').diagnostic_icons
@@ -41,69 +70,91 @@ return {
           vim.keymap.set('n', '<space>gr', vim.lsp.buf.references, opts)
           vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
           vim.keymap.set({ 'n', 'v' }, '<space>ca', vim.lsp.buf.code_action, opts)
+
+          local client = ev.data and vim.lsp.get_client_by_id(ev.data.client_id)
+          if vim.lsp.inlay_hint and client and client.server_capabilities.inlayHintProvider then
+            vim.lsp.inlay_hint.enable(true, { bufnr = ev.buf })
+          end
         end,
       })
 
-      -- border for float win
-      require('lspconfig.ui.windows').default_options.border = 'rounded'
-      local handlers = {
-        ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
-        ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' }),
+      local capabilities = require('blink.cmp').get_lsp_capabilities()
+
+      vim.lsp.config('*', {
+        capabilities = capabilities,
+        handlers = {
+          ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
+          ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' }),
+        },
+      })
+
+      vim.lsp.config('lua_ls', {
+        settings = {
+          Lua = {
+            diagnostics = { globals = { 'vim' } },
+            workspace = { checkThirdParty = false },
+            completion = { callSnippet = 'Replace' },
+          },
+        },
+      })
+
+      vim.lsp.config('jdtls', {
+        root_markers = {
+          '.git',
+          'mvnw',
+          'gradlew',
+          'pom.xml',
+          'build.gradle',
+          'build.gradle.kts',
+          'settings.gradle',
+          'settings.gradle.kts',
+        },
+      })
+
+      vim.lsp.config('gopls', {
+        settings = {
+          gopls = {
+            analyses = { unusedparams = true },
+            staticcheck = true,
+            gofumpt = true,
+          },
+        },
+      })
+
+      vim.lsp.config('pyright', {
+        settings = {
+          python = {
+            analysis = {
+              typeCheckingMode = 'standard',
+            },
+          },
+        },
+      })
+
+      vim.lsp.config('rust_analyzer', {
+        settings = {
+          ['rust-analyzer'] = {
+            cargo = { allFeatures = true },
+            checkOnSave = { command = 'clippy' },
+          },
+        },
+      })
+
+      local enable_servers = {
+        'jdtls',
+        'pyright',
+        'gopls',
+        'rust_analyzer',
+        'html',
+        'ts_ls',
+        'cssls',
+        'jsonls',
+        'bashls',
+        'lua_ls',
       }
 
-      -- float diagnostic under cursor
-      vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-        group = vim.api.nvim_create_augroup('float_diagnostic', { clear = true }),
-        callback = function()
-          vim.diagnostic.open_float(nil, { focus = false })
-        end,
-      })
-
-      -- autocompletion
-      local capabilities = require('cmp_nvim_lsp').default_capabilities(vim.lsp.protocol.make_client_capabilities())
-
-      -- on attch
-      local on_attach = function(client, bufnr)
-        -- float diagnostic under cursor
-        vim.api.nvim_create_autocmd('CursorHold', {
-          buffer = bufnr,
-          callback = function()
-            local opts = {
-              focusable = false,
-              close_events = { 'BufLeave', 'CursorMoved', 'InsertEnter', 'FocusLost' },
-              border = 'rounded',
-              source = 'always',
-              prefix = ' ',
-              scope = 'cursor',
-            }
-            vim.diagnostic.open_float(nil, opts)
-          end,
-        })
-
-        -- highlight symbol under cursor
-        if client.server_capabilities.documentHighlightProvider then
-          vim.api.nvim_create_augroup('lsp_document_highlight', {
-            clear = false,
-          })
-          vim.api.nvim_clear_autocmds({
-            buffer = bufnr,
-            group = 'lsp_document_highlight',
-          })
-          vim.api.nvim_create_autocmd({ 'CursorHold', 'CursorHoldI' }, {
-            group = 'lsp_document_highlight',
-            buffer = bufnr,
-            callback = function()
-              vim.lsp.buf.document_highlight()
-            end,
-          })
-          vim.api.nvim_create_autocmd({ 'CursorMoved', 'CursorMovedI' }, {
-            group = 'lsp_document_highlight',
-            buffer = bufnr,
-            callback = function()
-              vim.lsp.buf.clear_references()
-            end,
-          })
-        end
+      for _, server in ipairs(enable_servers) do
+        pcall(vim.lsp.enable, server)
       end
     end,
   },
