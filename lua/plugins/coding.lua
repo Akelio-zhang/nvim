@@ -40,8 +40,8 @@ return {
         'javascript',
         'java',
         'go',
-	'rust',
-	'just'
+        'rust',
+        'just'
       },
     },
     config = function(_, opts)
@@ -58,6 +58,8 @@ return {
         lua = { 'stylua' },
         javascript = { 'prettierd' },
         vue = { 'prettierd' },
+        python = { "ruff_format" },  -- 使用 ruff 的格式化功能
+        java = { "google-java-format" },  -- 使用 google-java-format
       },
       format_on_save = {
         timeout_ms = 600,

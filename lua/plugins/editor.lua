@@ -1,87 +1,33 @@
 return {
   -- wakatime
   { 'wakatime/vim-wakatime', lazy = false },
+ 
   -- explorer
   {
-    'nvim-tree/nvim-tree.lua',
-    cmd = 'NvimTreeToggle',
-    version = '*',
-    dependencies = { 'nvim-tree/nvim-web-devicons' },
-    config = function()
-      local icons = require('plugins.config.icons').diagnostic_icons
-
-      require('nvim-tree').setup({
-        view = {
-          width = 30,
-          side = 'left',
-        },
-        renderer = {
-          indent_markers = {
-            enable = true,
-            icons = {
-              corner = '└',
-              edge = '│',
-              item = '│',
-              bottom = '─',
-              none = ' ',
-            },
-          },
-          icons = {
-            webdev_colors = true,
-            git_placement = 'before',
-            glyphs = {
-              default = '',
-              symlink = '',
-              git = {
-                unstaged = '',
-                staged = '',
-                unmerged = '',
-                renamed = '﯀',
-                deleted = '',
-                untracked = '󱧈',
-                ignored = '',
-              },
-              folder = {
-                default = '',
-                open = '',
-                empty = '',
-                empty_open = '',
-                symlink = '',
-              },
-            },
-          },
-        },
-        diagnostics = {
-          enable = true,
-          show_on_dirs = true,
-          icons = {
-            error = icons.error,
-            warning = icons.warn,
-            hint = icons.hint,
-            info = icons.info,
-          },
-        },
-        actions = {
-          change_dir = {
-            enable = true,
-            global = false,
-            restrict_above_cwd = false,
-          },
-          open_file = {
-            quit_on_open = false,
-            resize_window = true,
-            window_picker = {
-              enable = true,
-              chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890',
-              exclude = {
-                filetype = { 'notify', 'packer', 'qf', 'diff', 'fugitive', 'fugitiveblame' },
-                buftype = { 'nofile', 'terminal', 'help' },
-              },
-            },
-          },
-        },
-      })
-    end,
+    'mikavilpas/yazi.nvim',
+    event = 'VeryLazy',
+    dependencies = {
+      'folke/snacks.nvim',
+    },
+    keys = {
+      {
+        '<space>ya',
+        mode = { 'n', 'v' },
+        '<cmd>Yazi<cr>',
+        desc = 'Open yazi at the current file',
+      },
+      {
+        '<space>yd',
+        '<cmd>Yazi cwd<cr>',
+        desc = "Open the file manager in nvim's working directory",
+      },
+    },
+    opts = {
+      open_for_directories = false,
+      keymaps = {
+        show_help = '<f1>',
+      },
+    },
   },
 
   -- file finder
@@ -90,17 +36,24 @@ return {
     cmd = 'Telescope',
     dependencies = {
       'nvim-lua/plenary.nvim',
-      'ahmedkhalf/project.nvim',
       {
         'nvim-telescope/telescope-fzf-native.nvim',
         build = 'make',
       },
     },
+    keys = {
+      { '<space>ff', '<cmd>Telescope find_files<cr>', desc = 'Find Files' },
+      { '<space>fg', '<cmd>Telescope git_files<cr>', desc = 'Git Files' },
+      { '<space>fo', '<cmd>Telescope oldfiles<cr>', desc = 'Oldfiles' },
+      { '<space>fb', '<cmd>Telescope buffers<cr>', desc = 'Buffers' },
+      { '<space>fl', '<cmd>Telescope live_grep<cr>', desc = 'Live Grep' },
+      { '<space>fd', '<cmd>Telescope diagnostics<cr>', desc = 'Diagnostics' },
+    },
     config = function()
       require('telescope').setup({
         defaults = {
           prompt_prefix = ' ',
-          selection_caret = ' ',
+          selection_caret = ' ',
           layout_stratgy = 'center',
           layout_config = {
             width = 0.8,
@@ -139,7 +92,6 @@ return {
         },
       })
       require('telescope').load_extension('fzf')
-      require('telescope').load_extension('projects')
     end,
   },
 }

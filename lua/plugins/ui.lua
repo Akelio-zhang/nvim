@@ -56,7 +56,7 @@ return {
       dashboard.section.buttons.val = {
         dashboard.button('n', icons.new_file .. ' New File', '<Cmd>ene <BAR> startinsert<CR>'),
         dashboard.button('p', icons.search .. ' Search Projects', '<Cmd>Telescope projects<CR>'),
-        dashboard.button('e', icons.explorer .. ' NvimTree Explorer', '<Cmd>NvimTreeToggle<CR>'),
+        dashboard.button('e', icons.explorer .. ' yazi', '<space>ya'),
         dashboard.button('l', icons.plugin_manager .. ' Lazy Manage', '<Cmd>Lazy<CR>'),
         dashboard.button('s', icons.setting .. ' Setting', '<Cmd>e $MYVIMRC<CR>'),
         dashboard.button('q', icons.quit .. ' Quit Neovim', '<Cmd>qa<CR>'),

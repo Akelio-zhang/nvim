@@ -10,7 +10,6 @@ return {
       { 'j-hui/fidget.nvim', opts = {} },
     },
     config = function()
-      local lspconfig = require('lspconfig')
       local icons = require('plugins.config.icons').diagnostic_icons
 
       -- diagnostic
@@ -106,35 +105,6 @@ return {
           })
         end
       end
-
-      local servers = {
-        'clangd',
-        'vimls',
-        'html',
-        'cssls',
-        'jsonls',
-        'tailwindcss',
-      }
-      for _, lsp in ipairs(servers) do
-        lspconfig[lsp].setup({
-          on_attach = on_attach,
-          capabilities = capabilities,
-        })
-      end
-
-      -- lua
-      lspconfig.lua_ls.setup({
-        on_attach = on_attach,
-        handlers = handlers,
-        capabilities = capabilities,
-        settings = {
-          Lua = {
-            diagnostics = {
-              globals = { 'vim' },
-            },
-          },
-        },
-      })
     end,
   },
 }
