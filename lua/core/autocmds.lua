@@ -39,3 +39,14 @@ vim.api.nvim_create_autocmd('FileType', {
     vim.keymap.set('n', 'q', '<cmd>close<cr>', { buffer = event.buf, silent = true })
   end,
 })
+
+vim.api.nvim_create_autocmd('FileType', {
+  group = augroup('java_indent'),
+  pattern = 'java',
+  callback = function(event)
+    vim.bo[event.buf].expandtab = true
+    vim.bo[event.buf].tabstop = 4
+    vim.bo[event.buf].shiftwidth = 4
+    vim.bo[event.buf].softtabstop = 4
+  end,
+})

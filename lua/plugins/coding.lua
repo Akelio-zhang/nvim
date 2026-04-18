@@ -69,6 +69,11 @@ return {
         go = { 'goimports', 'gofmt' },
         rust = { 'rustfmt' },
       },
+      formatters = {
+        ['google-java-format'] = {
+          prepend_args = { '--aosp' },
+        },
+      },
       format_on_save = {
         timeout_ms = 600,
         lsp_fallback = true,

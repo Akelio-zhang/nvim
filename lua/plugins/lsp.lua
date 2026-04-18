@@ -45,19 +45,15 @@ return {
       vim.diagnostic.config({
         virtual_text = false,
         float = { border = 'rounded' },
+        signs = {
+          text = {
+            [vim.diagnostic.severity.ERROR] = icons.error,
+            [vim.diagnostic.severity.WARN] = icons.warn,
+            [vim.diagnostic.severity.HINT] = icons.hint,
+            [vim.diagnostic.severity.INFO] = icons.info,
+          },
+        },
       })
-
-      -- set signs
-      local signs = {
-        Error = icons.error,
-        Warn = icons.warn,
-        Hint = icons.hint,
-        Info = icons.info,
-      }
-      for type, icon in pairs(signs) do
-        local hl = 'DiagnosticSign' .. type
-        vim.fn.sign_define(hl, { text = icon, texthl = hl, numhl = hl })
-      end
 
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('UserLspConfig', {}),
@@ -65,7 +61,9 @@ return {
           vim.bo[ev.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
           local opts = { buffer = ev.buf }
-          vim.keymap.set('n', '<space>gk', vim.lsp.buf.hover, opts)
+          vim.keymap.set('n', '<space>gk', function()
+            vim.lsp.buf.hover({ border = 'rounded' })
+          end, opts)
           vim.keymap.set('n', '<space>gd', vim.lsp.buf.definition, opts)
           vim.keymap.set('n', '<space>gr', vim.lsp.buf.references, opts)
           vim.keymap.set('n', '<space>rn', vim.lsp.buf.rename, opts)
@@ -86,10 +84,6 @@ return {
 
       vim.lsp.config('*', {
         capabilities = capabilities,
-        handlers = {
-          ['textDocument/hover'] = vim.lsp.with(vim.lsp.handlers.hover, { border = 'rounded' }),
-          ['textDocument/signatureHelp'] = vim.lsp.with(vim.lsp.handlers.signature_help, { border = 'rounded' }),
-        },
       })
 
       vim.lsp.config('lua_ls', {
@@ -130,6 +124,13 @@ return {
           python = {
             analysis = {
               typeCheckingMode = 'standard',
+              autoImportCompletions = true,
+              autoSearchPaths = true,
+              useLibraryCodeForTypes = true,
+              diagnosticMode = 'openFilesOnly',
+            },
+            completion = {
+              completeFunctionParens = true,
             },
           },
         },
@@ -139,7 +140,8 @@ return {
         settings = {
           ['rust-analyzer'] = {
             cargo = { allFeatures = true },
-            checkOnSave = { command = 'clippy' },
+            checkOnsave = true,
+            check = { command = 'clippy' },
           },
         },
       })
