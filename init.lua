@@ -1,4 +1,5 @@
 require('core.performance')
+require('core.version')
 require('core.disabled')
 require('core.options')
 require('core.keymaps')

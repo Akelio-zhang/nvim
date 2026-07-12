@@ -50,7 +50,8 @@ return {
       }
 
       local stats = require('lazy').stats()
-      dashboard.section.footer.val = icons.loaded .. ' Ake-Neovim loaded ' .. stats.count .. ' plugins'
+      local version = require('core.version').version()
+      dashboard.section.footer.val = icons.loaded .. ' Ake-Neovim v' .. version .. ' · ' .. stats.count .. ' plugins'
 
       alpha.setup(dashboard.opts)
 
