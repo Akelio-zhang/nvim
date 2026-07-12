@@ -48,9 +48,6 @@ keymap('n', '<SPACE>fd', '<Cmd>Telescope diagnostics<CR>', opts)
 keymap('n', '<SPACE>fp', '<Cmd>Telescope resume<CR>', opts)
 keymap('n', '<SPACE>ft', '<Cmd>TodoTelescope<CR>', opts)
 
--- explorer
-keymap('n', '<SPACE>ee', '<Cmd>Yazi<CR>', opts)
-
 -- lazygit
 keymap('n', '<SPACE>gg', '<Cmd>LazyGit<CR>', opts)
 

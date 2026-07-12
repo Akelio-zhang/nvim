@@ -3,7 +3,7 @@ return {
   {
     'mason-org/mason.nvim',
     cmd = 'Mason',
-    opts = {},
+    opts = { PATH = 'prepend' },
   },
   {
     'mason-org/mason-lspconfig.nvim',
@@ -34,7 +34,7 @@ return {
     'neovim/nvim-lspconfig',
     event = 'VeryLazy',
     dependencies = {
-      { 'folke/neodev.nvim', opts = {} },
+      { 'folke/lazydev.nvim', opts = {} },
       { 'j-hui/fidget.nvim', opts = {} },
       'saghen/blink.cmp',
     },
@@ -77,10 +77,6 @@ return {
       })
 
       local capabilities = require('blink.cmp').get_lsp_capabilities()
-      local mason_bin = vim.fn.stdpath('data') .. '/mason/bin'
-      if not string.find(':' .. vim.env.PATH .. ':', ':' .. mason_bin .. ':', 1, true) then
-        vim.env.PATH = mason_bin .. ':' .. vim.env.PATH
-      end
 
       vim.lsp.config('*', {
         capabilities = capabilities,
@@ -146,22 +142,9 @@ return {
         },
       })
 
-      local enable_servers = {
-        'jdtls',
-        'pyright',
-        'gopls',
-        'rust_analyzer',
-        'html',
-        'ts_ls',
-        'cssls',
-        'jsonls',
-        'bashls',
-        'lua_ls',
-      }
-
-      for _, server in ipairs(enable_servers) do
-        pcall(vim.lsp.enable, server)
-      end
+      -- Servers are started by mason-lspconfig's `automatic_enable`, which
+      -- calls vim.lsp.enable for each installed server after the vim.lsp.config
+      -- calls above have registered their settings.
     end,
   },
 }

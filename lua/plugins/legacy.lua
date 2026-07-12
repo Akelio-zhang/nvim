@@ -7,17 +7,4 @@ return {
       { 'ga', '<Plug>(EasyAlign)', mode = { 'n', 'x' }, desc = 'Easy Align' },
     },
   },
-
-  {
-    'tpope/vim-fireplace',
-    ft = 'clojure',
-  },
-
-  {
-    dir = vim.fn.expand('~/my-prototype-plugin'),
-    cond = function()
-      return vim.fn.isdirectory(vim.fn.expand('~/my-prototype-plugin')) == 1
-    end,
-    event = 'VeryLazy',
-  },
 }
