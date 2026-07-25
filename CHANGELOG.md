@@ -30,6 +30,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+_Nothing yet._
+
+## [0.2.0] - 2026-07-25
+
 ### Changed
 - Migrated `nvim-treesitter` from the legacy `master` branch to `main`, using
   its Neovim 0.12 API and installing parsers and queries under the user data
