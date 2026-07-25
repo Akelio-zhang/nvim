@@ -30,7 +30,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-_Nothing yet._
+### Changed
+- Migrated `nvim-treesitter` from the legacy `master` branch to `main`, using
+  its Neovim 0.12 API and installing parsers and queries under the user data
+  directory.
+- Tree-sitter now loads eagerly, installs the configured language parsers, and
+  enables native highlighting and indentation on matching filetypes.
+
+### Fixed
+- Replaced the removed `nvim_treesitter#foldexpr()` with Neovim's native
+  Tree-sitter fold expression.
+- Resolved the Tree-sitter highlighter `node:range()` nil error on Neovim
+  0.12 by aligning the plugin branch and installed parsers with the editor API.
 
 ## [0.1.0] - 2026-07-12
 

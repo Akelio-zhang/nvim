@@ -42,7 +42,7 @@ opt.guicursor = 'a:block'
 -- folding
 opt.foldenable = false
 opt.foldmethod = 'expr'
-opt.foldexpr = 'nvim_treesitter#foldexpr()'
+opt.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
 opt.foldlevel = 99
 
 -- list char
