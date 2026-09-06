@@ -32,6 +32,36 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 _Nothing yet._
 
+## [0.3.0] - 2026-09-06
+
+### Added
+- A repeatable headless smoke test for syntax highlighting, save formatting,
+  formatter selection, color previews, directory routing, splits and LSP enablement.
+
+### Changed
+- Migrate color previews to the maintained `catgoose/nvim-colorizer.lua` fork,
+  loaded on buffer read/creation, eliminating the old deprecated API call.
+- Added TypeScript, TSX, Markdown and inline Markdown parsers; parser installation
+  now attaches highlighting and indentation to existing buffers when it completes.
+- Load Yazi at startup to handle directory arguments and `:edit <directory>`.
+- Load Conform on buffer read/creation so save formatting is ready before the
+  `VeryLazy` event, and use the current `lsp_format` fallback option.
+- Use `vim.diagnostic.jump` for previous/next diagnostic navigation.
+- Preserve existing lockfile updates for gitsigns, mason-lspconfig, nvim-lspconfig,
+  nvim-web-devicons and yazi in the tested release.
+- Document runtime tools, Prettier installation and formatter availability checks;
+  refresh the configuration audit and correct the Yazi shortcuts.
+
+### Fixed
+- Resolve filetypes to parser names before enabling Tree-sitter, including `sh`
+  (Bash) and `javascriptreact` (JSX).
+- Run only the first available frontend formatter instead of running both
+  prettierd and prettier in sequence.
+- Keep directional split shortcuts from changing global split preferences.
+
+### Removed
+- Global `vim.tbl_flatten` override that incorrectly flattened only one level.
+
 ## [0.2.0] - 2026-07-25
 
 ### Changed

@@ -3,11 +3,11 @@ return {
   {
     'kdheepak/lazygit.nvim',
     cmd = {
-      "LazyGit",
-      "LazyGitConfig",
-      "LazyGitCurrentFile",
-      "LazyGitFilter",
-      "LazyGitFilterCurrentFile",
+      'LazyGit',
+      'LazyGitConfig',
+      'LazyGitCurrentFile',
+      'LazyGitFilter',
+      'LazyGitFilterCurrentFile',
     },
   },
   {
@@ -38,43 +38,64 @@ return {
         'json',
         'just',
         'lua',
+        'markdown',
+        'markdown_inline',
         'python',
         'rust',
+        'tsx',
+        'typescript',
         'vim',
       }
 
       require('nvim-treesitter').setup({
         install_dir = vim.fn.stdpath('data') .. '/site',
       })
-      require('nvim-treesitter').install(languages)
+      local enabled_languages = {}
+      for _, lang in ipairs(languages) do
+        enabled_languages[lang] = true
+      end
+
+      local function start_treesitter(buf)
+        if not vim.api.nvim_buf_is_loaded(buf) or vim.bo[buf].buftype ~= '' then
+          return
+        end
+        local lang = vim.treesitter.language.get_lang(vim.bo[buf].filetype)
+        if lang and enabled_languages[lang] and pcall(vim.treesitter.start, buf, lang) then
+          vim.bo[buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
+        end
+      end
 
       vim.api.nvim_create_autocmd('FileType', {
         group = vim.api.nvim_create_augroup('user-treesitter', { clear = true }),
-        pattern = languages,
         callback = function(args)
-          if pcall(vim.treesitter.start, args.buf) then
-            vim.bo[args.buf].indentexpr = "v:lua.require'nvim-treesitter'.indentexpr()"
-          end
+          start_treesitter(args.buf)
         end,
       })
+
+      -- Newly installed parsers must also attach to buffers that are already open.
+      require('nvim-treesitter').install(languages):await(vim.schedule_wrap(function()
+        for _, buf in ipairs(vim.api.nvim_list_bufs()) do
+          start_treesitter(buf)
+        end
+      end))
     end,
   },
 
   -- formatting
   {
     'stevearc/conform.nvim',
-    event = 'VeryLazy',
+    event = { 'BufReadPre', 'BufNewFile' },
     opts = {
       formatters_by_ft = {
         lua = { 'stylua' },
-        javascript = { 'prettierd', 'prettier' },
-        typescript = { 'prettierd', 'prettier' },
-        javascriptreact = { 'prettierd', 'prettier' },
-        typescriptreact = { 'prettierd', 'prettier' },
-        html = { 'prettierd', 'prettier' },
-        css = { 'prettierd', 'prettier' },
-        json = { 'prettierd', 'prettier' },
-        vue = { 'prettierd', 'prettier' },
+        javascript = { 'prettierd', 'prettier', stop_after_first = true },
+        typescript = { 'prettierd', 'prettier', stop_after_first = true },
+        javascriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        typescriptreact = { 'prettierd', 'prettier', stop_after_first = true },
+        html = { 'prettierd', 'prettier', stop_after_first = true },
+        css = { 'prettierd', 'prettier', stop_after_first = true },
+        json = { 'prettierd', 'prettier', stop_after_first = true },
+        vue = { 'prettierd', 'prettier', stop_after_first = true },
         python = { 'ruff_format' },
         java = { 'google-java-format' },
         go = { 'goimports', 'gofmt' },
@@ -87,7 +108,7 @@ return {
       },
       format_on_save = {
         timeout_ms = 600,
-        lsp_fallback = true,
+        lsp_format = 'fallback',
       },
     },
   },
@@ -120,8 +141,10 @@ return {
     config = true,
   },
   {
-    'norcalli/nvim-colorizer.lua',
-    event = 'VeryLazy',
-    config = true,
+    'catgoose/nvim-colorizer.lua',
+    name = 'colorizer.nvim',
+    main = 'colorizer',
+    event = { 'BufReadPost', 'BufNewFile' },
+    opts = {},
   },
 }

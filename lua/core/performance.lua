@@ -2,12 +2,6 @@ if vim.loader and vim.loader.enable then
   vim.loader.enable()
 end
 
--- Compatibility shim for older plugins that still call vim.tbl_flatten().
--- Neovim 0.12 deprecates it, so we replace it with the iterator-based form.
-vim.tbl_flatten = function(t)
-  return vim.iter(t or {}):flatten():totable()
-end
-
 vim.api.nvim_create_user_command('NvimLazyProfile', function()
   vim.cmd('Lazy profile')
 end, { desc = 'Open lazy.nvim profile view' })
@@ -23,11 +17,7 @@ vim.api.nvim_create_user_command('NvimStartupReport', function()
     return
   end
   local stats = lazy.stats()
-  local msg = string.format(
-    'Startup: %.2fms | Plugins: %d/%d',
-    stats.startuptime or 0,
-    stats.loaded or 0,
-    stats.count or 0
-  )
+  local msg =
+    string.format('Startup: %.2fms | Plugins: %d/%d', stats.startuptime or 0, stats.loaded or 0, stats.count or 0)
   vim.notify(msg, vim.log.levels.INFO)
 end, { desc = 'Show startup timing summary' })

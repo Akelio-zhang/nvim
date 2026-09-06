@@ -1,11 +1,11 @@
 return {
   -- wakatime
   { 'wakatime/vim-wakatime', lazy = false },
- 
+
   -- explorer
   {
     'mikavilpas/yazi.nvim',
-    event = 'VeryLazy',
+    lazy = false,
     dependencies = {
       'folke/snacks.nvim',
     },
@@ -23,7 +23,7 @@ return {
       },
     },
     opts = {
-      open_for_directories = false,
+      open_for_directories = true,
       keymaps = {
         show_help = '<f1>',
       },

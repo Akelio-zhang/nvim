@@ -1,67 +1,37 @@
-# Neovim 配置现状与优化计划
+# Neovim 配置审计
 
-更新时间：2026-03-04
+更新时间：2026-09-06 · 配置版本：0.3.0
 
-## 1. 当前配置结构
+## 当前结构
 
-- 启动入口：`init.vim`
-- 插件管理：`lazy.nvim`（已移除 `vim-plug`）
-- `lua/core/*`：基础设置、快捷键、自动命令、内置模块禁用
-- `lua/plugins/*`：按功能拆分的 lazy 插件定义（ui/editor/lsp/cmp/coding/markdown）
+- 入口：`init.lua`；插件管理：`lazy.nvim`，33 个插件。
+- `lua/core/`：选项、按键、自动命令、启动统计和版本信息。
+- `lua/plugins/`：按 UI、编辑、LSP、补全、代码和 Markdown 分类。
+- 语言服务器由 Mason 安装，通过 `vim.lsp.config` 配置并自动启用。
+- 补全使用 Blink + LuaSnip；保存和手动格式化统一使用 Conform。
 
-## 2. 当前插件概览（lazy-lock 锁定）
+## 0.3.0 修复
 
-共 36 个 lazy 插件，核心分组如下：
+- Treesitter 区分文件类型和解析器名称，覆盖 Shell、JSX、TypeScript/TSX。
+- 增加 Markdown 解析器，并在异步安装后为已打开的文件重新启用 Treesitter。
+- 前端格式化器使用首个可用工具，避免重复执行。
+- 移除改变递归展开行为的全局 `vim.tbl_flatten` 补丁。
+- 将颜色预览迁移到维护中的 `catgoose/nvim-colorizer.lua`，消除旧插件的弃用调用。
+- Yazi 启动时加载，接管目录浏览入口。
+- 分屏快捷键使用局部方向修饰符，不再修改全局分屏选项。
+- 诊断跳转及格式化回退改用当前 API，更新环境准备说明和按键文档。
 
-- UI：`alpha-nvim`、`lualine.nvim`、`indent-blankline.nvim`
-- 文件与检索：`yazi.nvim`、`telescope.nvim`、`telescope-fzf-native.nvim`
-- Git：`lazygit.nvim`、`gitsigns.nvim`
-- 语法与编辑增强：`nvim-treesitter`、`nvim-autopairs`、`nvim-ts-autotag`、`Comment.nvim`、`todo-comments.nvim`、`nvim-colorizer.lua`
-- LSP 与补全：`nvim-lspconfig`、`mason.nvim`、`mason-lspconfig.nvim`、`blink.cmp`、`LuaSnip`
-- 格式化：`conform.nvim`
-- Markdown：`markdown-preview.nvim`、`vim-table-mode`、`md-img-paste.vim`
-- 其他：`vim-wakatime`
+## 后续按需优化
 
-历史 `vim-plug` 段已迁移/清理，当前以 `lazy.nvim` 为单一插件管理入口。
+- 用交互会话的 `:Lazy profile` 判断是否需要进一步细分 `VeryLazy` 插件；
+  headless 启动统计不能代表完整交互启动时间。
+- 在实际 Java、Go、Rust、Python 项目中按需求调整 LSP；注册启用不等于
+  每种语言在每个项目中都已通过集成测试。
+- 大文件出现卡顿时，再为 Treesitter、颜色预览和保存格式化增加大小阈值。
+- 保留当前个人按键习惯；`s/S/H/J/K/L` 覆盖原生操作是有意配置。
 
-## 3. 已识别问题
+## 环境检查说明
 
-### 高优先级（影响可用性）
-
-- `core.options` 未加载，`lua/core/options.lua` 设置不生效。
-- `core.disabled` 禁用了 `syntax` 与 `ftplugin`，可能导致高亮与文件类型行为异常。
-- LSP 仅有 UI/按键与诊断配置，未配置实际 language server 的 `setup()`。
-- 部分快捷键指向未安装或未启用能力（`<space>ee`、`<space>fp`）。
-
-### 中优先级（体验与稳定性）
-
-- Telescope 选项拼写错误：`layout_stratgy`。
-- `nvim-cmp` 配置了 `treesitter` source 但未安装 `cmp-treesitter`。
-- LSP 诊断浮窗 autocmd 逻辑有重复定义。
-
-### 低优先级（维护性）
-
-- 同时维护 `vim-plug` 与 `lazy.nvim`，维护成本和冲突风险偏高。
-- `init.vim` 与 Lua 选项存在重复/冲突（如缩进设置 4 vs 2）。
-
-## 4. 优化路线（分阶段）
-
-### Phase 1（已开始，低风险）
-
-- [x] 启用 `core.options`
-- [x] 修复失效 keymap 与 dashboard 中不存在命令
-- [x] 修复 Telescope 拼写错误
-- [x] 清理 `nvim-cmp` 无效 source
-- [x] 保留基础能力前提下，恢复 `syntax/ftplugin`
-- [x] 增加基础 LSP server setup（按已安装 server 自动生效）
-
-### Phase 2（建议下一步）
-
-- [x] 将 `vim-plug` 插件逐项迁移/清理到 `lazy.nvim`
-- [x] 移除 `plug#begin/plug#end` 块，实现单一插件管理
-
-### Phase 3（增强）
-
-- [x] 引入 `mason.nvim + mason-lspconfig` 管理 LSP 安装与自动配置
-- [x] 细化 `conform` 与 LSP 的职责边界（格式化统一走 conform）
-- [x] 增加启动与加载性能检查（`:Lazy profile`、`:checkhealth`）
+使用 `:ConformInfo` 查看当前文件真正可用的格式化器，使用 `:checkhealth`
+检查外部依赖。Prettier 可通过 Bun 全局安装或安装在项目中；可选的 prettierd
+未安装不影响 Prettier 工作。现有插件没有 LuaRocks 依赖，因此其缺失不阻止使用。
